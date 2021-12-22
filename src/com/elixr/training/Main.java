@@ -40,7 +40,7 @@ public class Main {
             System.out.println("File format supported");
         } else {
             System.out.println("File format not supported");
-            System.exit(0);
+            System.exit(0); //if file not supports will exit here
         }
 
     }
