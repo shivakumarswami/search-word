@@ -17,15 +17,13 @@ public class Main {
         String inputfilepath = args[0]; //changed variable name from inputfile to inputfilepath
         String searchword = args[1];  //changed variable name from wordsearch to searchword
         File file = new File(inputfilepath);
-
-        isSupportedFile(file);
-
         System.out.println("Processing................");
         String data = readFile(inputfilepath); //combined two lines
+        isSupportedFile(file);
         searchword(data, searchword);
 
-
     }
+
     public static String readFile(String fileName) {
         String data = null; //changes "" to null
         try {
@@ -37,13 +35,13 @@ public class Main {
     }
 
     public static void isSupportedFile(File file) {      //changed from supportfile method to isSupportedFile and
-                                                                      // changed return type from boolean to void
-        if (file.getName().endsWith(".txt") && (file.length()!=0)) {
+        // changed return type from boolean to void
+        if (file.getName().endsWith(".txt") && (file.length() != 0)) {
             System.out.println("File format supported");
         } else {
             System.out.println("File format not supported");
+            System.exit(0);
         }
-        return;
 
     }
 
