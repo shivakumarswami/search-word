@@ -11,21 +11,21 @@ public class Main {
 
     public static void main(String[] args) {
         if (args.length != 2) {
-            System.out.println("Argument missing"); //changed error message file path not valid to argument missing
+            System.out.println("Argument missing");
             return;
         }
-        String inputfilepath = args[0]; //changed variable name from inputfile to inputfilepath
-        String searchword = args[1];  //changed variable name from wordsearch to searchword
+        String inputfilepath = args[0];
+        String searchword = args[1];
         File file = new File(inputfilepath);
         System.out.println("Processing................");
-        String data = readFile(inputfilepath); //combined two lines
+        String data = readFile(inputfilepath);
         isSupportedFile(file);
         searchword(data, searchword);
 
     }
 
     public static String readFile(String fileName) {
-        String data = null; //changes "" to null
+        String data = null;
         try {
             data = new String(Files.readAllBytes(Paths.get(fileName)));
         } catch (IOException e) {
@@ -34,13 +34,12 @@ public class Main {
         return data;
     }
 
-    public static void isSupportedFile(File file) {      //changed from supportfile method to isSupportedFile and
-        // changed return type from boolean to void
+    public static void isSupportedFile(File file) {
         if (file.getName().endsWith(".txt") && (file.length() != 0)) {
             System.out.println("File format supported");
         } else {
             System.out.println("File format not supported");
-            System.exit(0); //if file not supports will exit here
+            System.exit(0);
         }
 
     }
