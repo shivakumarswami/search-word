@@ -1,50 +1,72 @@
 package com.elixr.training;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.StringTokenizer;
 import java.lang.String;
 
 public class Main {
-
+    static  final String TXTFILE = ".txt" ;
+    static final String JSONFILE = ".json";
     public static void main(String[] args) {
+
         if (args.length != 2) {
-            System.out.println("Argument missing");
+            System.out.println(" File path and word to search are missing. Exiting the program... ");
             return;
         }
-        String inputfilepath = args[0];
-        String searchword = args[1];
-        File file = new File(inputfilepath);
-        System.out.println("Processing................");
-        String data = readFile(inputfilepath);
-        isSupportedFile(file);
-        searchword(data, searchword);
+        String inputFilePath = args[0];
+        String searchWord = args[1];
+        File file = new File(inputFilePath);
 
+        System.out.println("Processing................");
+
+        if (!file.exists()) {
+            System.out.println("file doesn't exists");
+            return;
+        }
+
+        if(!isSupportedFile(file)) {
+            System.out.println("File is not valid");
+            return;
+        }
+        String data = readFile(inputFilePath);
+
+        if(data==null) {
+            System.out.println("could not read the data from file");
+            return ;
+        }
+        if (file.length()==0) {
+            System.out.println("Data not found");
+            return;
+        }
+        searchWord(data, searchWord);
     }
 
     public static String readFile(String fileName) {
         String data = null;
+
+
         try {
             data = new String(Files.readAllBytes(Paths.get(fileName)));
-        } catch (IOException e) {
+            data = data.replaceAll("[^a-zA-Z0-9@]", " ");
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return data;
     }
 
-    public static void isSupportedFile(File file) {
-        if (file.getName().endsWith(".txt") && (file.length() != 0)) {
+    public static boolean isSupportedFile(File file) {
+        if (file.getName().endsWith(TXTFILE) || file.getName().endsWith(JSONFILE) ) {
             System.out.println("File format supported");
+            return true;
         } else {
             System.out.println("File format not supported");
-            System.exit(0);
+            return false;
         }
-
     }
-
-    public static void searchword(String data, String searchword) {
+    public static void searchWord(String data, String searchword) {
         StringTokenizer st = new StringTokenizer(data);
         int count = 0;
         while (st.hasMoreTokens()) {
