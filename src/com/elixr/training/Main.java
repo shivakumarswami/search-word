@@ -1,39 +1,27 @@
 package com.elixr.training;
 
-
-
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.StringTokenizer;
 import java.lang.String;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.*;
-
+import com.elixrdb.training.JdbcConnection;
 
 public class Main {
+    static JdbcConnection database = new JdbcConnection();
+    static int count = 0;
+    static String inputFilePath;
+    static String searchWord ;
 
-    static final String TXTFILE = ".txt";
-    static final String JSONFILE = ".json";
-
-
-    public static void main(String[] args) throws SQLException {
-
+    public static void main(String[] args) throws SQLException, InterruptedException {
         if (args.length != 2) {
             System.out.println(" File path and word to search are missing. Exiting the program... ");
+            database.dbOperation(inputFilePath, searchWord,Constants.status, count);
             return;
         }
-        String inputFilePath = args[0];
-        String searchWord = args[1];
-        File file = null;
-        try {
-            file = new File(inputFilePath);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-
+        inputFilePath = args[0];
+        searchWord = args[1];
+        File file = new File(inputFilePath);
 
         System.out.println("Processing................");
 
@@ -56,7 +44,9 @@ public class Main {
             System.out.println("Data not found");
             return;
         }
-        searchWord(inputFilePath, data, searchWord);
+        SearchWord search = new SearchWord(data, count);
+        search.start();
+        search.join();
 
     }
 
@@ -75,7 +65,7 @@ public class Main {
     }
 
     public static boolean isSupportedFile(File file) {
-        if (file.getName().endsWith(TXTFILE) || file.getName().endsWith(JSONFILE)) {
+        if (file.getName().endsWith(Constants.TXTFILE) || file.getName().endsWith(Constants.JSONFILE)) {
             System.out.println("File format supported");
             return true;
         } else {
@@ -83,74 +73,6 @@ public class Main {
             return false;
         }
     }
-
-    public static void searchWord(String inputFilePath, String data, String searchWord) throws SQLException {
-        StringTokenizer st = new StringTokenizer(data);
-        int count = 0;
-        while (st.hasMoreTokens()) {
-            if (searchWord.equalsIgnoreCase(st.nextToken())) {
-                count++;
-            }
-        }
-        if (count == 0) {
-            System.out.println("Word not found");
-            JDBCconnection.SearchFailure(inputFilePath, searchWord, count);
-        } else {
-            System.out.println("The word has been found");
-            System.out.println("The word has been repeated for " + count + " times");
-            JDBCconnection.SearchSuccess(inputFilePath, searchWord, count);
-
-        }
-    }
-
-    class JDBCconnection extends Main {
-
-        private static String SqlQuery = "INSERT INTO audit VALUES (?,?,now(),?,?)";
-        private static Connection Con = null;
-        private static PreparedStatement stmt = null;
-
-        public static void SearchSuccess(String inputFilePath, String searchWord, int count) throws SQLException {
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                Con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mysqlsearchword", "root", "tiger");
-                stmt = Con.prepareStatement(SqlQuery);
-                stmt.setString(1, inputFilePath);
-                stmt.setString(2, searchWord);
-                stmt.setString(3, "Success");
-                stmt.setInt(4, count);
-                stmt.executeUpdate();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        public static void SearchFailure(String inputFilePath, String searchWord, int count) throws SQLException {
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            try {
-                Con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mysqlsearchword", "root", "tiger");
-                stmt = Con.prepareStatement(SqlQuery);
-                stmt.setString(1, inputFilePath);
-                stmt.setString(2, searchWord);
-                stmt.setString(3, "Failure");
-                stmt.setInt(4, count);
-                stmt.executeUpdate();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
 }
 
 
