@@ -5,18 +5,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.lang.String;
 import java.sql.*;
+
 import com.elixrdb.training.JdbcConnection;
 
 public class Main {
     static JdbcConnection database = new JdbcConnection();
     static int count = 0;
     static String inputFilePath;
-    static String searchWord ;
+    static String searchWord;
 
     public static void main(String[] args) throws SQLException, InterruptedException {
         if (args.length != 2) {
-            System.out.println(" File path and word to search are missing. Exiting the program... ");
-            database.dbOperation(inputFilePath, searchWord,Constants.status, count);
+            System.out.println(Constants.ERROR_MESSAGE_ARGUMENTS_NOT_FOUND);
+            database.dbOperation(inputFilePath, searchWord, Constants.STATUS_FAILURE, count, Constants.ERROR_MESSAGE);
             return;
         }
         inputFilePath = args[0];
@@ -26,25 +27,25 @@ public class Main {
         System.out.println("Processing................");
 
         if (!file.exists()) {
-            System.out.println("file doesn't exists");
+            System.out.println(Constants.ERROR_MESSAGE_FILE_NOT_EXISTS);
             return;
         }
 
         if (!isSupportedFile(file)) {
-            System.out.println("File is not valid");
+            System.out.println(Constants.ERROR_MESSAGE_FILE_NOT_VALID);
             return;
         }
         String data = readFile(inputFilePath);
 
         if (data == null) {
-            System.out.println("Could not read the data from file");
+            System.out.println(Constants.ERROR_MESSAGE_COULD_NOT_READ_DATA);
             return;
         }
         if (file.length() == 0) {
-            System.out.println("Data not found");
+            System.out.println(Constants.ERROR_MESSAGE_DATA_NOT_FOUND);
             return;
         }
-        SearchWord search = new SearchWord(data, count);
+        SearchWord search = new SearchWord(data, count, database);
         search.start();
         search.join();
 
@@ -66,10 +67,10 @@ public class Main {
 
     public static boolean isSupportedFile(File file) {
         if (file.getName().endsWith(Constants.TXTFILE) || file.getName().endsWith(Constants.JSONFILE)) {
-            System.out.println("File format supported");
+            System.out.println(Constants.ERROR_MESSAGE_FILE_FORMAT_SUPPORTED);
             return true;
         } else {
-            System.out.println("File format not supported");
+            System.out.println(Constants.ERROR_MESSAGE_FILE_FORMAT_NOT_SUPPORTED);
             return false;
         }
     }
