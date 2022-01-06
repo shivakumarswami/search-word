@@ -14,10 +14,14 @@ public class Main {
     static String inputFilePath;
     static String searchWord;
 
-    public static void main(String[] args) throws SQLException, InterruptedException {
+    public static void main(String[] args) {
         if (args.length != 2) {
             System.out.println(Constants.ERROR_MESSAGE_ARGUMENTS_NOT_FOUND);
-            database.dbOperation(inputFilePath, searchWord, Constants.STATUS_FAILURE, count, Constants.ERROR_MESSAGE);
+            try {
+                database.dbOperation(inputFilePath, searchWord, Constants.STATUS_FAILURE, count, Constants.ERROR_MESSAGE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return;
         }
         inputFilePath = args[0];
@@ -45,9 +49,13 @@ public class Main {
             System.out.println(Constants.ERROR_MESSAGE_DATA_NOT_FOUND);
             return;
         }
-        SearchWord search = new SearchWord(data, count, database);
-        search.start();
-        search.join();
+        try {
+            SearchWord search = new SearchWord(data, count, database);
+            search.start();
+            search.join();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -74,6 +82,7 @@ public class Main {
             return false;
         }
     }
+
 }
 
 

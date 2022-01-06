@@ -8,9 +8,9 @@ import java.sql.SQLException;
 import java.util.StringTokenizer;
 
 public class SearchWord extends Thread {
-    String data;
-    int count;
-    JdbcConnection database;
+    private String data;
+    private int count;
+    private JdbcConnection database;
 
     public SearchWord(String data, int count, JdbcConnection database) {
         this.data = data;
@@ -20,6 +20,7 @@ public class SearchWord extends Thread {
 
     public void run() {
         StringTokenizer st = new StringTokenizer(data);
+        System.out.println(currentThread().getName());
 
         while (st.hasMoreTokens()) {
             if (searchWord.equalsIgnoreCase(st.nextToken())) {

@@ -6,12 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class JdbcConnection {
-    private static String url = "jdbc:mysql://localhost:3306/mysqlsearchword";
-    private static String user = "root";
-    private static String password = "tiger";
+    private static final String url = "jdbc:mysql://localhost:3306/mysqlsearchword";
+    private static final String user = "root";
+    private static final String password = "tiger";
+    private static final String sqlQuery = "INSERT INTO audit VALUES (?,?,now(),?,?,?)";
     private static Connection con;
     private static PreparedStatement stmt;
-    private static String sqlQuery = "INSERT INTO audit VALUES (?,?,now(),?,?,?)";
+
 
     public static void dbOperation(String inputFilePath, String searchWord, String STATUS_FAILURE, int count, String ERROR_MESSAGE) throws SQLException {
 
