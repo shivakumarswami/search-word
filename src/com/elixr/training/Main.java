@@ -18,7 +18,7 @@ public class Main {
         if (args.length != 2) {
             System.out.println(Constants.ERROR_MESSAGE_ARGUMENTS_NOT_FOUND);
             try {
-                database.dbOperation(inputFilePath, searchWord, Constants.STATUS_FAILURE, count, Constants.ERROR_MESSAGE);
+                database.dbOperation(inputFilePath, searchWord, Constants.STATUS_FAILURE, count, Constants.ERROR_MESSAGE_ARGUMENTS_NOT_FOUND);
             } catch (Exception e) {
                 e.printStackTrace();
             }

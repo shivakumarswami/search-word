@@ -30,7 +30,7 @@ public class SearchWord extends Thread {
         if (count == 0) {
             System.out.println(Constants.ERROR_MESSAGE_WORD_NOT_FOUND);
             try {
-                database.dbOperation(inputFilePath, searchWord, Constants.STATUS_FAILURE, count, Constants.ERROR_MESSAGE);
+                database.dbOperation(inputFilePath, searchWord, Constants.STATUS_FAILURE, count, Constants.ERROR_MESSAGE_WORD_NOT_FOUND);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
