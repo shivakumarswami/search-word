@@ -32,21 +32,41 @@ public class Main {
 
         if (!file.exists()) {
             System.out.println(Constants.ERROR_MESSAGE_FILE_NOT_EXISTS);
+            try {
+                database.dbOperation(inputFilePath, searchWord, Constants.STATUS_FAILURE, count, Constants.ERROR_MESSAGE_FILE_NOT_EXISTS);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return;
         }
 
         if (!isSupportedFile(file)) {
             System.out.println(Constants.ERROR_MESSAGE_FILE_NOT_VALID);
+            try {
+                database.dbOperation(inputFilePath, searchWord, Constants.STATUS_FAILURE, count, Constants.ERROR_MESSAGE_FILE_NOT_VALID);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return;
         }
         String data = readFile(inputFilePath);
 
         if (data == null) {
             System.out.println(Constants.ERROR_MESSAGE_COULD_NOT_READ_DATA);
+            try {
+                database.dbOperation(inputFilePath, searchWord, Constants.STATUS_FAILURE, count, Constants.ERROR_MESSAGE_COULD_NOT_READ_DATA);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return;
         }
         if (file.length() == 0) {
             System.out.println(Constants.ERROR_MESSAGE_DATA_NOT_FOUND);
+            try {
+                database.dbOperation(inputFilePath, searchWord, Constants.STATUS_FAILURE, count, Constants.ERROR_MESSAGE_DATA_NOT_FOUND);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return;
         }
         try {
@@ -75,10 +95,15 @@ public class Main {
 
     public static boolean isSupportedFile(File file) {
         if (file.getName().endsWith(Constants.TXTFILE) || file.getName().endsWith(Constants.JSONFILE)) {
-            System.out.println(Constants.ERROR_MESSAGE_FILE_FORMAT_SUPPORTED);
+            System.out.println(Constants.MESSAGE_FILE_FORMAT_SUPPORTED);
             return true;
         } else {
             System.out.println(Constants.ERROR_MESSAGE_FILE_FORMAT_NOT_SUPPORTED);
+            try {
+                database.dbOperation(inputFilePath, searchWord, Constants.STATUS_FAILURE, count, Constants.ERROR_MESSAGE_FILE_FORMAT_NOT_SUPPORTED);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return false;
         }
     }

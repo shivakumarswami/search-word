@@ -36,7 +36,7 @@ public class SearchWord extends Thread {
             }
             return;
         } else {
-            System.out.println(Constants.ERROR_MESSAGE_WORD_HAS_BEEN_FOUND + count + " times");
+            System.out.println(Constants.MESSAGE_WORD_HAS_BEEN_FOUND + count + " times");
             try {
                 database.dbOperation(inputFilePath, searchWord, "Success", count, "null");
             } catch (SQLException e) {
