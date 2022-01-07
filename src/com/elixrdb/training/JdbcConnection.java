@@ -28,7 +28,9 @@ public class JdbcConnection {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            con.close();
+            if (con != null) {
+                con.close();
+            }
         }
     }
 }
